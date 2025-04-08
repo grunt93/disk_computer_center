@@ -41,7 +41,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * 中文錯誤提示
      *
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
@@ -69,12 +69,12 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'student_id' => ['required', 'string', 'unique:users', 'regex:/^[A-Z][0-9]{8}$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed']
         ], $messages);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * 生成新用戶
      *
      * @param  array  $data
      * @return \App\Models\User
