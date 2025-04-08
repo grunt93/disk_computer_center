@@ -41,7 +41,7 @@
                                         name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                            <strong>{!! $message !!}</strong>
                                         </span>
                                     @enderror
                                 </div>
@@ -61,3 +61,25 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            const timerElement = document.getElementById('lockout-timer');
+            if (timerElement) {
+                let seconds = parseInt(timerElement.textContent);
+                if (seconds > 0) {
+                    const countdownTimer = setInterval(() => {
+                        seconds--;
+                        timerElement.textContent = seconds;
+                        
+                        if (seconds <= 0) {
+                            clearInterval(countdownTimer);
+                            location.reload();
+                        }
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+@endpush
