@@ -19,7 +19,7 @@ Route::controller(ProfileController::class)
         Route::get('/', 'show')->name('show');
         Route::get('/edit', 'edit')->name('edit');
         Route::put('/', 'update')->name('update');
-        Route::put('/password', 'updatePassword')->name('password');
+        Route::put('/password', 'updatePassword')->name('password.update');
         Route::delete('/', 'delete')->name('delete');
     });
 
