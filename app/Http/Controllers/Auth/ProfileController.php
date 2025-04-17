@@ -49,19 +49,21 @@ class ProfileController extends Controller
     {
         $validated = $request->validate([
             'current_password' => ['required', 'current_password'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'new_password' => ['required', 'min:8', 'confirmed'],
+            'new_password_confirmation' => ['required']
         ], [
             'current_password.required' => '請輸入目前密碼',
             'current_password.current_password' => '目前密碼不正確',
-            'password.required' => '請輸入新密碼',
-            'password.confirmed' => '新密碼與確認新密碼不相符',
-            'password.min' => '密碼至少需要 8 個字元'
+            'new_password.required' => '請輸入新密碼',
+            'new_password.min' => '密碼至少需要 8 個字元',
+            'new_password.confirmed' => '新密碼與確認新密碼不相符',
+            'new_password_confirmation.required' => '請確認新密碼'
         ]);
 
         /** @var User $user */
         $user = Auth::user();
         $user->update([
-            'password' => Hash::make($validated['password'])
+            'password' => Hash::make($validated['new_password'])
         ]);
 
         return back()->with('status', '密碼更新成功');
@@ -70,15 +72,13 @@ class ProfileController extends Controller
     public function delete(Request $request)
     {
         $request->validate([
-            'password' => ['required', 'current_password'],
+            'delete_password' => ['required', 'current_password'],
         ], [
-            'password.required' => '請輸入密碼',
-            'password.current_password' => '密碼不正確'
+            'delete_password.required' => '請輸入密碼',
+            'delete_password.current_password' => '密碼不正確'
         ]);
 
-        /**
-         * @var User $user 
-         */
+        /** @var User $user */
         $user = Auth::user();
         Auth::logout();
         $user->delete();

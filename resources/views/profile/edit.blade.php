@@ -54,42 +54,58 @@
                 </div>
             </div>
 
-            <!-- 更改密碼表單 -->
-            <div class="card mb-4">
-                <div class="card-header">更改密碼</div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('profile.password.update') }}">
-                        @csrf
-                        @method('PUT')
+            <!-- 修改密碼區塊 -->
+            <div class="d-grid">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePasswordModel">
+                    更改密碼
+                </button>
+            </div>
 
-                        <div class="mb-3">
-                            <label for="current_password" class="form-label">目前密碼</label>
-                            <input type="password" class="form-control @error('current_password') is-invalid @enderror"
-                                id="current_password" name="current_password" required>
-                            @error('current_password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+            <!-- 修改密碼確認視窗 -->
+            <div class="modal fade" id="updatePasswordModel" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">更改密碼</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
+                        <form method="POST" action="{{ route('profile.password.update') }}">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="current_password" class="form-label">目前密碼</label>
+                                    <input type="password"
+                                        class="form-control @error('current_password') is-invalid @enderror"
+                                        id="current_password" name="current_password" required>
+                                    @error('current_password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">新密碼</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                id="password" name="password" required>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">新密碼</label>
+                                    <input type="password" class="form-control @error('new_password') is-invalid @enderror"
+                                        id="password" name="new_password" required>
+                                    @error('new_password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                        <div class="mb-3">
-                            <label for="password_confirmation" class="form-label">確認新密碼</label>
-                            <input type="password" class="form-control" id="password_confirmation"
-                                name="password_confirmation" required>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">更改密碼</button>
-                        </div>
-                    </form>
+                                <div class="mb-3">
+                                    <label for="new_password_confirmation" class="form-label">確認新密碼</label>
+                                    <input type="password" class="form-control" 
+                                        id="new_password_confirmation" 
+                                        name="new_password_confirmation" 
+                                        required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">確認更改</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -97,10 +113,9 @@
 
             <!-- 刪除帳號區塊 -->
             <div class="d-grid">
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                        data-bs-target="#deleteAccountModal">
-                        刪除帳號
-                    </button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                    刪除帳號
+                </button>
             </div>
 
             <!-- 刪除帳號確認視窗 -->
@@ -117,10 +132,10 @@
                             <div class="modal-body">
                                 <p class="text-danger">警告：此操作無法復原！</p>
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">請輸入密碼確認：</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        id="password" name="password" required>
-                                    @error('password')
+                                    <label for="delete_password" class="form-label">請輸入密碼確認：</label>
+                                    <input type="password" class="form-control @error('delete_password') is-invalid @enderror"
+                                        id="delete_password" name="delete_password" required>
+                                    @error('delete_password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -140,12 +155,17 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        // 如果有錯誤訊息，自動顯示刪除確認視窗
-        @if($errors->has('password'))
-            $('#deleteAccountModal').modal('show');
-        @endif
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            // 如果有修改密碼的錯誤訊息，顯示修改密碼視窗
+            @if($errors->has('current_password') || $errors->has('new_password'))
+                $('#updatePasswordModel').modal('show');
+            @endif
+
+            // 如果有刪除帳號的錯誤訊息，顯示刪除確認視窗
+            @if($errors->has('delete_password'))
+                $('#deleteAccountModal').modal('show');
+            @endif
+        });
+    </script>
 @endpush
